@@ -1,28 +1,27 @@
-import 'dotenv/config';
-import { ObjectId } from "mongodb";
-import conectarAoBanco from "../config/dbConfig.js"
-// Conecta ao banco de dados utilizando a string de conexão fornecida como variável de ambiente
-const conexao = await conectarAoBanco(process.env.STRING_CONEXAO);
+import 'dotenv/config'; // Carrega as variáveis de ambiente do arquivo .env
+import { ObjectId } from "mongodb"; // Importa a classe ObjectId do MongoDB para trabalhar com IDs de objetos
+import conectarAoBanco from "../config/dbConfig.js" // Importa a função para conectar ao banco de dados
+
+const conexao = await conectarAoBanco(process.env.STRING_CONEXAO); // Conecta ao banco de dados utilizando a string de conexão fornecida como variável de ambiente
 
 // Função assíncrona para buscar todos os posts do banco de dados
-export async function getTodosPosts() {
-    // Seleciona o banco de dados "imersao-instabytes"
-    const db = conexao.db("imersao-instabytes");
-    // Seleciona a coleção "posts" dentro do banco de dados
-    const colecao = db.collection("posts");
-    // Retorna um array com todos os documentos da coleção
-    return colecao.find().toArray();
+export async function getTodosPosts() { 
+    const db = conexao.db("imersao-instabytes"); // Seleciona o banco de dados "imersao-instabytes" 
+    const colecao = db.collection("posts"); // Seleciona a coleção "posts" dentro do banco de dados
+    return colecao.find().toArray(); // Retorna um array com todos os documentos da coleção
 }
 
-export async function criarPost(novoPost) {
-    const db = conexao.db("imersao-instabytes");
-    const colecao = db.collection("posts");
-    return colecao.insertOne(novoPost);
+// Função assíncrona para inserir um novo post no banco de dados
+export async function criarPost(novoPost) { 
+    const db = conexao.db("imersao-instabytes"); // Seleciona o banco de dados "imersao-instabytes"
+    const colecao = db.collection("posts"); // Seleciona a coleção "posts" dentro do banco de dados
+    return colecao.insertOne(novoPost); // Insere um novo post na coleção e retorna o resultado da operação
 }
 
-export async function atualizarPost(id, novoPost) {
-    const db = conexao.db("imersao-instabytes");
-    const colecao = db.collection("posts");
-    const objID = ObjectId.createFromHexString(id);
-    return colecao.updateOne({_id: new ObjectId(objID)}, {$set:novoPost});
+// Função assíncrona para atualizar o novo post do banco de dados
+export async function atualizarPost(id, novoPost) { 
+    const db = conexao.db("imersao-instabytes"); // Seleciona o banco de dados "imersao-instabytes"
+    const colecao = db.collection("posts"); // Seleciona a coleção "posts" dentro do banco de dados
+    const objID = ObjectId.createFromHexString(id); // Converte o ID do post para o tipo ObjectId do MongoDB
+    return colecao.updateOne({_id: new ObjectId(objID)}, {$set:novoPost}); // Atualiza o post com o novo conteúdo utilizando o ID
 }
